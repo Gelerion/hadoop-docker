@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+
+  <property>
+    <name>mapreduce.framework.name</name>
+    <value>yarn</value>
+  </property>
+
+<!--
+  <property>
+    <name>mapreduce.cluster.local.dir</name>
+    <value>${hadoop.tmp.dir}/mapred/local</value>
+    <description>
+    	The local directory where MapReduce stores intermediate data files. May be a comma-separated list of directories 
+    	on different devices in order to spread disk i/o.
+    </description>
+  </property>
+-->
+
+<!-- OPTIMIZATIONS -->
+<!-- ================================== -->
+  <property>
+    <name>mapreduce.tasktracker.map.tasks.maximum</name>
+    <value>1</value>
+  </property>
+
+  <property>
+    <name>mapreduce.tasktracker.reduce.tasks.maximum</name>
+    <value>1</value>
+  </property>
+
+<!-- 
+ Additional properties to condiser:
+	mapreduce.io.sort.mb 
+	mapreduce.io.sort.factor
+	mapreduce.compress.map.output
+	mapreduce.reduce.parallel.copies
+	mapreduce.tasktracker.http.threads
+	mapreduce.reduce.slowstart.completed.maps
+
+ The combination of slow start, reducer count, parallel copies, and map output compression allow administrators to control 
+ slot usage and network bandwidth, and optimize resource utilization during the shuffle phase rather extensively.
+-->  
+
+</configuration>

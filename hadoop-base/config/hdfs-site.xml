@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+
+  <!-- https://issues.apache.org/jira/browse/HDFS-9427 -->
+  <!-- 50470 -> 9871  -->
+  <property>
+     <!-- secure port -->
+     <name>dfs.namenode.https-address</name>
+     <value>0.0.0.0:9871</value>
+  </property>
+
+  <!-- 50070 -> 9870  -->
+  <property>
+     <name>dfs.namenode.http-address</name>
+     <value>0.0.0.0:9870</value>
+  </property>
+
+  <!-- Datanode ports -->
+  <!-- 50020 -> 9867 -->
+  <property>
+     <name>dfs.datanode.ipc.address</name>
+     <value>0.0.0.0:9867</value>
+  </property>
+
+  <!-- 50010 -> 9866 -->
+  <property>
+     <name>dfs.datanode.address</name>
+     <value>0.0.0.0:9866</value>
+  </property>
+
+  <!-- 50475 -> 9865 -->
+  <property>
+     <name>dfs.datanode.https.address</name>
+     <value>0.0.0.0:9865</value>
+  </property>
+
+  <!-- 50075 -> 9864 -->
+  <property>
+     <name>dfs.datanode.http.address</name>
+     <value>0.0.0.0:9864</value>
+  </property>
+
+
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file:///data/1/dfs/namenode</value>
+    <description>
+    	One of the most critical parameters, dfs.name.dir specifies a comma separated list of local directories 
+    	(with no spaces) in which the namenode should store a copy of the HDFS filesystem metadata. Given the 
+    	criticality of the metadata, administrators are strongly encouraged to specify two internal disks and a 
+    	low latency, highly reliable, NFS mount. A complete copy of the metadata is stored in each directory; 
+    	in other words, the namenode mirrors the data between directories.
+    </description>
+  </property>
+
+  <property>
+   <name>dfs.data.dir</name>
+   <value>file:///data/1/dfs/dn</value>
+   <description>
+  	 Used to indicate where datanodes should store HDFS block data. Also a comma separate list, rather than 
+   	 mirroring data to each directory specified, the datanode round robins blocks between disks in an attempt to 
+   	 allocate blocks evenly across all drives. The datanode assumes each directory specifies a separate physical 
+   	 device in a JBOD group. As described earlier, by JBOD, we mean each disk individually addressable by the OS, 
+   	 and formatted and mounted as a separate mount point. Loss of a physical disk is not critical since replicas 
+   	 will exist on other machines in the cluster.
+   </description>
+  </property>
+
+  <property>
+   	 <name>dfs.permissions.superusergroup</name>
+     <value>hadoop</value>
+  </property>
+
+  <!-- dfs.namenode.datanode.registration.ip-hostname-check -> false -->
+
+<!-- OPTIMIZATIONS -->
+<!-- ================================== -->
+
+<!--
+  <property>
+    <name>dfs.datanode.balance.bandwidthPerSec</name>
+    <value>104857600</value>
+    <description>
+      The HDFS balancer utility looks for over or underutilized datanodes in the cluster and moves blocks between them 
+      in an effort to balance the distribution of blocks. If the balancing operation were not rate limited, it would 
+      easily monopolize the network leaving nothing for MapReduce jobs or data ingest. The dfs.balance.bandwidthPerSec 
+      parameter specifies how much bandwidth each datanode is allowed to used for balancing. The value is given in bytes 
+      which is unintuitive since network bandwidth is always described in terms of bits so double check your math!
+      Unfortunately, as mentioned above, this parameter is used by each datanode to control bandwidth and is read by the daemon at startup time. This prevents the value from being specified by the administrator at the time the balancer is run.
+   </description>
+  </property>
+
+  <property>
+    <name>dfs.block.size</name>
+    <value>134217728</value>
+    <description>
+      A common misconception is that HDFS has a block size; this isn’t true. Instead, each file has an associated block size 
+      which is determined when the file is initially created. The dfs.block.size parameter determines the default block size 
+      for all newly created files. It doesn’t affect files that already exist in the filesystem and clients sometimes override 
+      it when they have special information about the files they’ll create.
+   </description>
+  </property>
+
+  <property>
+    <name>dfs.datanode.du.reserved</name>
+    <value>10737418240</value>
+    <description>
+      When the datanode reports the available disk capacity to the namenode, it will report the sum of the unused capacity of all 
+      dfs.data.dir disks. Since mapred.local.dir usually shares the same available disk space, there needs to be a way to reserve 
+      disk space for MapReduce applications. The value of dfs.datanode.du.reserved specifies the amount of space, in bytes, to be 
+      reserved on each disk in dfs.data.dir. No disk space is reserved, by default, meaning HDFS is allowed to consume all available 
+      disk space on each data disk, at which point the node becomes read only
+   </description>
+  </property>
+
+  <property>
+    <name>dfs.namenode.handler.count</name>
+    <value>10</value>
+    <description>
+      The namenode has a pool of worker threads that are responsible for processing RPC requests from clients as well as other 
+      cluster daemons. A larger number of handlers (i.e. worker threads) means a greater capacity to handle concurrent heartbeats 
+      from datanodes as well as metadata operations from clients. For larger clusters, or clusters with a large number of clients, 
+      it’s usually necessary to increase dfs.namename.handler.count from its default of 10. A general guideline for setting dfs.namenode.handler.count is to make it the natural logarithm of the number of cluster nodes, times 20 (as a whole number).
+           e.g. math.log(instancesCount) * 20
+      Symptoms of this being set too low include datanodes timing out or receiving connection refused while trying to connect to 
+      the namenode, large namenode RPC queue sizes, and possibly high RPC latency.
+   </description>
+  </property>
+-->
+
+
+
+</configuration>

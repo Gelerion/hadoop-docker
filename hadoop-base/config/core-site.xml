@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://namenode:9000</value>
+    <description>
+       URL that specifies the default filesystem used by clients.
+       Use the form hdfs://hostname:port where hostname and port are the machine and port on which the namenode 
+       daemon runs and listens. This parameter serves double duty in that it also informs the namenode as to which 
+       IP and port it should bind. Datanodes heartbeat to this hostname and port as well.
+    </description>
+  </property>
+
+<!-- OPTIMIZATIONS -->
+<!-- ================================== -->
+  <property>
+    <name>io.file.buffer.size</name>
+    <value>65536</value>
+    <description>
+       Used as a general purpose buffer size. Larger buffers tend to result in more efficient data transfer, 
+       either from disk or during network operations, at the cost of increased memory consumption and latency. 
+       This property should be set to a multiple of the system page size, defined in bytes, and is 4KB by default.
+       A value of 64KB (65536 bytes) is a good starting point.	
+    </description>
+  </property>
+
+
+</configuration>
