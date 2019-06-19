@@ -1,13 +1,12 @@
 # Hadoop Docker
 ![Screenshot](images/hadoop_logo_new.svg)
-------
+----
 Dockerized Hadoop HDFS with Yarn. 
 The default Hadoop version is `2.9.2`, could be easily changed during image creation.
 All the ports configured to fit 3.x releases, as described in [this](https://issues.apache.org/jira/browse/HDFS-9427) ticket.
 
 # Running
-------
-```sh
+```
 $ cd hadoop-base/
 $ docker build -t hadoop-base-image .
 ```
@@ -19,7 +18,7 @@ Then you can start everything with this command:
 ```sh
 $ docker-compose up --build
 ```
-------
+
 **Fast navigation links**
 - Yarn Resource Manager http://localhost:8088/ui2/#/cluster-overview
 - Hdfs Name Node http://localhost:9870/dfshealth.html#tab-overview
