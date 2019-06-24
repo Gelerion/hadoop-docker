@@ -1,13 +1,12 @@
 # Hadoop Docker
 ![Screenshot](images/hadoop_logo_new.svg)
-------
+----
 Dockerized Hadoop HDFS with Yarn. 
 The default Hadoop version is `2.9.2`, could be easily changed during image creation.
 All the ports are configured to fit 3.x releases, as described in [this](https://issues.apache.org/jira/browse/HDFS-9427) ticket.
 
 # Running
-------
-```sh
+```
 $ cd hadoop-base/
 $ docker build -t hadoop-base-image .
 ```
@@ -19,13 +18,12 @@ Then you can start everything with this command:
 ```sh
 $ docker-compose up --build
 ```
-------
+
 **Fast navigation links**
 - Yarn Resource Manager http://localhost:8088/ui2/#/cluster-overview
 - Hdfs Name Node http://localhost:9870/dfshealth.html#tab-overview
 
 # Hadoop Cluster
-------
 - **Resource Manager** runs on `8088` port
 ResourceManager (RM) is the master that arbitrates all the available cluster resources and thus helps manage the distributed applications running on the YARN system. It works together with the per-node NodeManagers (NMs) and the per-application ApplicationMasters (AMs).
 - **Node Manager** runs on `8042` port
@@ -38,7 +36,6 @@ The NameNode is the centerpiece of an HDFS file system. It keeps the directory t
 The DataNode stores data in the HDFS. A functional filesystem has more than one DataNode, with data replicated across them. It then responds to requests from the NameNode for filesystem operations. Client applications can talk directly to a DataNode, once the NameNode has provided the location of the data
 
 # Usage
-------
 Not mandatroy, but highly preferable
 Add to the `/etc/hosts` the following data:
 ```
@@ -56,7 +53,6 @@ Navigate to the [HDFS NN](http://namenode:9870/dfshealth.html#tab-overview) page
 ![Screenshot](images/hdfsNN_conolse.png)
 
 ## Running Jobs
-------
 ```sh
 $ cd app/
 $ docker build -t hadoop-wordcount-image .
@@ -70,7 +66,6 @@ After job finishes, navigate to the [Browse Direcotry](http://namenode:9870/expl
 ![Screenshot](images/hdfs_file.png)
 
 Running each service separately
-------
 1. Create a bridge network
 ```
 docker network create --driver=bridge hadoop-net
@@ -133,18 +128,18 @@ Exposing ports
 
 # Extra
 -----
-Alternatives:
-Apache Bigtop: https://github.com/apache/bigtop   
-Apache Ambari: https://ambari.apache.org/  
-Docker: https://github.com/big-data-europe/docker-hadoop  
+Alternatives:  
+Apache Bigtop: https://github.com/apache/bigtop       
+Apache Ambari: https://ambari.apache.org/    
+Docker: https://github.com/big-data-europe/docker-hadoop    
 
-Config xml defaults:  
+Config xml defaults:    
 https://hadoop.apache.org/docs/r2.9.2/hadoop-project-dist/hadoop-common/core-default.xml
 https://hadoop.apache.org/docs/r2.9.2/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml
 https://hadoop.apache.org/docs/r2.9.2/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml
 https://hadoop.apache.org/docs/r2.9.2/hadoop-yarn/hadoop-yarn-common/yarn-default.xml
 
-Deprectaed props:  
+Deprectaed props:   
 https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/DeprecatedProperties.html
 
 Hadoop migration guide:  
@@ -154,3 +149,7 @@ http://hadoop.apache.org/docs/r2.9.1/hadoop-mapreduce-client/hadoop-mapreduce-cl
 
 Default ports:  
 https://www.stefaanlippens.net/hadoop-3-default-ports.html
+
+Hadoop migration guide:  
+https://www.cloudera.com/documentation/enterprise/5-4-x/topics/cdh_ig_mapreduce_to_yarn_migrate.html  
+ 
