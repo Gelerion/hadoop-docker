@@ -27,6 +27,24 @@
   <!-- yarn.resourcemanager.scheduler.address defaults to: ${yarn.resourcemanager.hostname}:8030 -->
   <!-- yarn.resourcemanager.resource-tracker.address defaults to: ${yarn.resourcemanager.hostname}:8031 -->
 
+  <!-- Consider enabling this check on production -->
+  <property>
+    <name>yarn.nodemanager.vmem-check-enabled</name>
+    <value>false</value>
+    <description>
+      Whether virtual memory limits will be enforced for containers
+    </description>
+  </property>
+
+  <property>
+    <name>yarn.nodemanager.pmem-check-enabled</name>
+    <value>false</value>
+    <description>
+      Whether physical memory limits will be enforced for containers
+    </description>
+  </property>
+  <!--  -->
+  
   <property>
     <name>yarn.timeline-service.hostname</name>
     <value>historyserver</value>

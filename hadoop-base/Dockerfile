@@ -42,9 +42,13 @@ RUN groupadd -r hadoop \
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod a+x /entrypoint.sh \
 	&& chown -R hadoop:hadoop ${HADOOP_HOME}/etc/hadoop/ \
-	&& chgrp hadoop ${HADOOP_HOME} && chmod g+rwX ${HADOOP_HOME} -R
+	&& chgrp -R hadoop ${HADOOP_HOME} && chmod g+rwX ${HADOOP_HOME} -R
+
 
 COPY --chown=hadoop:hadoop config/*.xml ${HADOOP_HOME}/etc/hadoop/
+
+# grant execute permissions for shell files
+RUN find ${HADOOP_HOME}/etc/hadoop/ -type f -iname "*.sh" -exec chmod a+x {} \;
 # RUN sed -i '/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop/:' $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 
 # CMD ["/bin/bash"]

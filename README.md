@@ -3,7 +3,7 @@
 ------
 Dockerized Hadoop HDFS with Yarn. 
 The default Hadoop version is `2.9.2`, could be easily changed during image creation.
-All the ports configured to fit 3.x releases, as described in [this](https://issues.apache.org/jira/browse/HDFS-9427) ticket.
+All the ports are configured to fit 3.x releases, as described in [this](https://issues.apache.org/jira/browse/HDFS-9427) ticket.
 
 # Running
 ------
@@ -87,54 +87,70 @@ docker build -t hadoop-historyserver-image .
 3. Run containers
 **Namenode**
 ```
-docker run -dit --name hadoop-namenode -p 9870:9870 --hostname namenode -e CLUSTER_NAME=test hadoop-namenode-image
+docker run -dit --name hadoop-namenode -p 9870:9870 --hostname namenode \
+-e CLUSTER_NAME=test \
+--network hadoop-net \
+hadoop-namenode-image
 ```
 **Datanode**
 ```
 docker run -dit --name hadoop-datanode -p 9864:9864 --hostname datanode \
--e CLUSTER_NAME=test hadoop-datanode-image \
--e SERVICE_PRECONDITION=namenode:9870
+-e CLUSTER_NAME=test \
+-e SERVICE_PRECONDITION=namenode:9870 \
+--network hadoop-net \
+hadoop-datanode-image
 ```
 **Resourcemanager**
 ```
 docker run -dit --name hadoop-resourcemanager -p 8088:8088 --hostname resourcemanager \
--e CLUSTER_NAME=test hadoop-resourcemanager-image \
--e SERVICE_PRECONDITION="namenode:9870 datanode:9864"
+-e CLUSTER_NAME=test \
+-e SERVICE_PRECONDITION="namenode:9870 datanode:9864" \
+--network hadoop-net \
+hadoop-resourcemanager-image
 ```
 **Nodemanager**
 ```
 docker run -dit --name hadoop-nodemanager -p 8042:8042 --hostname nodemanager \
--e CLUSTER_NAME=test hadoop-nodemanager-image \
--e SERVICE_PRECONDITION="namenode:9870 datanode:9864 resourcemanager:8088"
+-e CLUSTER_NAME=test \
+-e SERVICE_PRECONDITION="namenode:9870 datanode:9864 resourcemanager:8088" \
+--network hadoop-net \
+hadoop-nodemanager-image
 ```
 **Historyserver**
 ```
 docker run -dit --name hadoop-historyserver -p 8188:8188 --hostname historyserver \
--e CLUSTER_NAME=test hadoop-historyserver-image \
--e SERVICE_PRECONDITION="namenode:9870 datanode:9864 resourcemanager:8088"
+-e CLUSTER_NAME=test \
+-e SERVICE_PRECONDITION="namenode:9870 datanode:9864 resourcemanager:8088" \
+--network hadoop-net \
+hadoop-historyserver-image
 ```
 
 # Future Work
 -----
-Add [Dr.Elephant](https://github.com/linkedin/dr-elephant) as a monitoring service
-Customizable host names
-Exposing ports
+Add [Dr.Elephant](https://github.com/linkedin/dr-elephant) as a monitoring service  
+Customizable host names  
+Exposing ports  
 
 # Extra
 -----
 Alternatives:
-Apache Bigtop: https://github.com/apache/bigtop
-Apache Ambari: https://ambari.apache.org/
-Docker: https://github.com/big-data-europe/docker-hadoop
+Apache Bigtop: https://github.com/apache/bigtop   
+Apache Ambari: https://ambari.apache.org/  
+Docker: https://github.com/big-data-europe/docker-hadoop  
 
-Config xml defaults:
+Config xml defaults:  
 https://hadoop.apache.org/docs/r2.9.2/hadoop-project-dist/hadoop-common/core-default.xml
 https://hadoop.apache.org/docs/r2.9.2/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml
 https://hadoop.apache.org/docs/r2.9.2/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml
 https://hadoop.apache.org/docs/r2.9.2/hadoop-yarn/hadoop-yarn-common/yarn-default.xml
 
-Deprectaed props:
+Deprectaed props:  
 https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/DeprecatedProperties.html
 
-Hadoop migration guide:
+Hadoop migration guide:  
 https://www.cloudera.com/documentation/enterprise/5-4-x/topics/cdh_ig_mapreduce_to_yarn_migrate.html
+
+http://hadoop.apache.org/docs/r2.9.1/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html
+
+Default ports:  
+https://www.stefaanlippens.net/hadoop-3-default-ports.html
